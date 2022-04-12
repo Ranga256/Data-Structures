@@ -1,0 +1,41 @@
+Given a ‘N’ * ’M’ maze with obstacles, count and return the number of paths to reach the right-bottom cell from the top-left cell. 
+A cell in the given maze has a value -1 if it is a blockage or dead-end, else 0. 
+From a given cell, we are allowed to move to cells (i+1, j) and (i, j+1) only. Since the answer can be large, print it modulo 10^9 + 7.
+
+Consider the maze below :
+0 0 0 
+0 -1 0 
+0 0 0
+
+There are two ways to reach the bottom left corner - 
+
+(1, 1) -> (1, 2) -> (1, 3) -> (2, 3) -> (3, 3)
+(1, 1) -> (2, 1) -> (3, 1) -> (3, 2) -> (3, 3)
+
+Hence the answer for the above test case is 2.
+
+
+//Recursion approach
+
+import java.util.*;  
+public class Solution {
+	static int sum(ArrayList<ArrayList<Integer>> mat,int i,int j){
+		if(i>=0 && j>=0 ){
+			if(mat.get(i).get(j)==-1){
+				return 0;
+			}
+		}
+		if(i==0 && j==0){
+			return 1;
+		}
+		if(i<0 || j<0){
+			return 0;
+		}
+		int left=sum(mat,i-1,j);
+		int right=sum(mat,i,j-1);
+		return left+right;
+	}
+    static int mazeObstacles(int n, int m, ArrayList<ArrayList<Integer>> mat) {
+		return sum(mat,n-1,m-1);
+    }
+}
