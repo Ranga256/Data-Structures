@@ -1,0 +1,37 @@
+Given a positive integer n, generate an n x n matrix filled with elements from 1 to n2 in spiral order.
+
+Input: n = 3
+Output: [[1,2,3],[8,9,4],[7,6,5]]
+
+Intuition: Take stratrow endrow startcol and endcol after filling top row increment startrow,after filling last col decrement endcol,after filling bottom row decrement
+end row,after filling startcol increment startcol.
+
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] spi=new int[n][n];
+        int sr=0,er=n-1,sc=0,ec=n-1,j=1;
+        while(sr<=er && sc<=ec){
+            for(int i=sc;i<=ec;i++){
+                spi[sr][i]=j;
+                j++;
+            }
+            sr++;
+            for(int i=sr;i<=er;i++){
+                spi[i][ec]=j;
+                j++;
+            }
+            ec--;
+            for(int i=ec;i>=sc;i--){
+                spi[er][i]=j;
+                j++;
+            }
+            er--;
+            for(int i=er;i>=sr;i--){
+                spi[i][sc]=j;
+                j++;
+            }
+            sc++;
+        }
+        return spi;
+    }
+}
