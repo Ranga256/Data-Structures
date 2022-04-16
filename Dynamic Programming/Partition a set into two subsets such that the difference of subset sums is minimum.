@@ -1,0 +1,51 @@
+You are given an array containing N non-negative integers. 
+Your task is to partition this array into two subsets such that the absolute difference between subset sums is minimum.
+You just need to find the minimum absolute difference considering any valid division of the array elements.
+
+Input:
+1
+4
+1 2 3 4
+
+Sample Output 1:
+0
+
+Explanation:
+We can partition the given array into {2,3} and {1,4}, as this will give us the minimum possible absolute difference i.e (5-5=0) in this case.
+
+public class Solution {
+	public static int minSubsetSumDifference(int[] arr, int n) {
+		// Write your code here.
+		int sum=0,i;
+		for(i=0;i<n;i++){
+			sum+=arr[i];
+		}
+		int k=sum;
+		boolean[][] dp=new boolean[n][k+1];
+		for(i=0;i<n;i++){
+			dp[i][0]=true;
+		}
+		if(arr[0]<=k){
+			dp[0][arr[0]]=true;
+		}
+		for(int ind=1;ind<n;ind++){
+			for(int tar=1;tar<=k;tar++){
+				boolean nottake=dp[ind-1][tar];
+				boolean take=false;
+				if(arr[ind]<=tar){
+					take=dp[ind-1][tar-arr[ind]];
+				}
+				dp[ind][tar]=nottake | take;
+			}
+		}
+		int min=Integer.MAX_VALUE;
+		for(i=0;i<=k/2;i++){
+			if(dp[n-1][i]==true){
+				min=Math.min(min,Math.abs(k-i)-i);
+			}
+		}
+		return min;
+	}
+
+}
+
