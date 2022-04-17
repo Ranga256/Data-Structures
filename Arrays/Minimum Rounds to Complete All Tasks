@@ -1,0 +1,46 @@
+You are given a 0-indexed integer array tasks, where tasks[i] represents the difficulty level of a task.
+In each round, you can complete either 2 or 3 tasks of the same difficulty level.
+
+Return the minimum rounds required to complete all the tasks, or -1 if it is not possible to complete all the tasks.
+
+Input: tasks = [2,2,3,3,2,4,4,4,4,4]
+Output: 4
+Explanation: To complete all the tasks, a possible plan is:
+- In the first round, you complete 3 tasks of difficulty level 2. 
+- In the second round, you complete 2 tasks of difficulty level 3. 
+- In the third round, you complete 3 tasks of difficulty level 4. 
+- In the fourth round, you complete 2 tasks of difficulty level 4.  
+It can be shown that all the tasks cannot be completed in fewer than 4 rounds, so the answer is 4.
+
+
+class Solution {
+    public int minimumRounds(int[] tasks) {
+        int c=0;
+         Map<Integer, Integer> mp = new HashMap<>();
+        for (int i = 0; i < tasks.length; i++)
+        {
+            if (mp.containsKey(tasks[i]))
+            {
+                mp.put(tasks[i], mp.get(tasks[i]) + 1);
+            }
+            else
+            {
+                mp.put(tasks[i], 1);
+            }
+        }
+        for (Map.Entry<Integer, Integer> entry : mp.entrySet())
+        {
+            if(entry.getValue()<2){
+                return -1;
+            }
+            System.out.println(entry.getKey() + " " + entry.getValue());
+            if(entry.getValue()>=3){
+            c+=(entry.getValue()/3);
+            }
+            if(entry.getValue()%3!=0){
+            c+=1;
+            }
+        }
+        return c;
+    }
+}
