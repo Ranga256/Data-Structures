@@ -1,0 +1,49 @@
+You are given an array (0-based indexing) of positive integers and
+you have to tell how many different ways of selecting the elements 
+from the array are there such that the sum of chosen elements is equal to the target number “tar”.
+
+
+Input format:
+The first line of the input contains an integer, 'T’, denoting the number of test cases.
+
+The first line of each test case will contain two space-separated integers ‘N’ and “tar”, denoting the size of the array and the target sum.
+
+The second line of each test case contains ‘N’ space-separated integers denoting elements of the array.
+
+output: return count
+
+
+import java.util.*;
+public class Solution {
+	public static int countsubset(int ind,int tar,int[] num,int[][] dp){
+		if(tar==0){
+			return 1;
+		}
+		if(ind==0){
+			if(num[0]==tar){
+				return 1;
+			}else{
+				return 0;
+			}
+			}
+		if(dp[ind][tar]!=-1){
+			return dp[ind][tar];
+		}
+		int nottake=countsubset(ind-1,tar,num,dp);
+		int take=0;
+		if(num[ind]<=tar){
+			take=countsubset(ind-1,tar-num[ind],num,dp);
+		}
+		dp[ind][tar]=take+nottake;
+		return dp[ind][tar];
+	}
+    public static int findWays(int num[], int tar) {
+        // Write your code here..
+		int n=num.length;
+		int[][] dp=new int[n][tar+1];
+		for(int[] row:dp){
+			Arrays.fill(row,-1);
+		}
+		return countsubset(n-1,tar,num,dp);
+    }
+}
