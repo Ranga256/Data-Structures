@@ -1,0 +1,41 @@
+A thief is robbing a store and can carry a maximal weight of W into his knapsack. 
+There are N items and the ith item weighs wi and is of value vi. Considering the constraints of the maximum weight that a knapsack can carry, 
+you have to find and return the maximum value that a thief can generate by stealing items.
+
+
+import java.util.*;
+public class Solution{
+	static int maxsack(int ind,int[] weight,int[] value,int k,int[][] dp){
+		if(ind==0){
+			if(weight[ind]<=k){
+				return value[ind];
+			}else{
+				return 0;
+			}
+		}
+		if(dp[ind][k]!=-1){
+			return dp[ind][k];
+		}
+			int ntake=0+maxsack(ind-1,weight,value,k,dp);
+			int take=Integer.MIN_VALUE;
+			if(weight[ind]<=k){
+				take=value[ind]+maxsack(ind-1,weight,value,k-weight[ind],dp);
+			}
+			return dp[ind][k]=Math.max(take,ntake);
+		}
+    static int knapsack(int[] weight, int[] value, int n, int maxWeight) {
+
+            /* Your class should be named Solution
+            * Don't write main().
+            * Don't read input, it is passed as function argument.
+            * Change in the given tree itself.
+            * No need to return or print the output.
+            * Taking input and printing output is handled automatically.
+            */
+		int[][] dp=new int[n][maxWeight+1];
+		for(int row[]:dp){
+			Arrays.fill(row,-1);
+		}
+          return maxsack(n-1,weight,value,maxWeight,dp);
+    }
+}
