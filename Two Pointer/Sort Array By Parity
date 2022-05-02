@@ -1,0 +1,22 @@
+Given an integer array nums, move all the even integers at the beginning of the array followed by all the odd integers.
+
+Return any array that satisfies this condition.
+
+class Solution {
+    public int[] sortArrayByParity(int[] nums) {
+        int i=0,j=0,n=nums.length;
+        while(j<n){
+            if(i==j && nums[j]%2==0){
+                i++;
+            }
+            else if(nums[i]%2!=0 && nums[j]%2==0){
+                int temp=nums[i];
+                nums[i]=nums[j];
+                nums[j]=temp;
+                i++;
+            }
+            j++;
+        }
+        return nums;
+    }
+}
