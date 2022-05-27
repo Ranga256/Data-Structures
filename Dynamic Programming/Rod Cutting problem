@@ -1,0 +1,31 @@
+Given a rod of length ‘N’ units. 
+The rod can be cut into different sizes and each size has a cost associated with it. 
+Determine the maximum cost obtained by cutting the rod and selling its pieces.
+
+
+import java.util.*;
+public class Solution {
+    public static int count(int ind,int n,int price[],int[][] dp){
+        if(ind ==0){
+            return n*price[0];
+        }
+        if(dp[ind][n]!=-1){
+            return dp[ind][n];
+        }
+        int nottake=0+count(ind-1,n,price,dp);
+        int take=Integer.MIN_VALUE;
+        int rodLength = ind+1;
+        if(n>=rodLength){
+            take=price[ind]+count(ind,n-rodLength,price,dp);
+        }
+        return dp[ind][n]=Math.max(take,nottake);
+    }
+	public static int cutRod(int price[], int n) {
+		// Write your code here.
+        int[][] dp=new int[n][n+1];
+        for(int row[]:dp){
+           Arrays.fill(row,-1);
+        }
+        return count(n-1,n,price,dp);
+	}
+}
