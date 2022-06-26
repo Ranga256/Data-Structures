@@ -1,0 +1,22 @@
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+
+Intuition: add chars to set upto to the repeat character and remove the starting elements (sliding window) by checking max lemgth using variable
+
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> li=new HashSet<>();
+        int max=0,len=0;
+        for(int i=0;i<s.length();i++){
+            while(li.contains(s.charAt(i))==true){
+                li.remove(s.charAt(len));
+                len++;
+            }
+            li.add(s.charAt(i));
+            max=Math.max(max,i-len+1);
+        }
+        return max;
+    }
+}
