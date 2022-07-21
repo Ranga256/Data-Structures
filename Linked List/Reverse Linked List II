@@ -1,0 +1,38 @@
+Given the head of a singly linked list and two integers left and right where left <= right, 
+reverse the nodes of the list from position left to position right, and return the reversed list.
+
+Input: head = [1,2,3,4,5], left = 2, right = 4
+Output: [1,4,3,2,5]
+
+Intuition: Reverse the list in between given params and take the first part before param as one node and last part as other part and combine
+
+
+class Solution {
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        ListNode dummy = new ListNode(0, head);
+        if(left==right){
+            return head;
+        }
+        ListNode prev,curr,nex;
+        curr=head;
+        prev=dummy;
+         for(int i=1;i<left;i++){
+            prev=curr;
+            curr=curr.next;
+        }
+        ListNode firstPart=prev;
+        ListNode next = curr.next;
+       for (int i = 0; i < right - left + 1; i++) {
+            nex=curr.next;
+            curr.next=prev;
+            prev=curr;
+            curr=nex;
+        }
+        ListNode midPartEnd=prev;
+        ListNode secondPart=curr;
+        System.out.println(firstPart.next.next.val);
+        firstPart.next.next=secondPart;
+        firstPart.next=midPartEnd;
+        return dummy.next;
+    }
+}
