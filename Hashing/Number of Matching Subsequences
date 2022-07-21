@@ -1,0 +1,40 @@
+Given a string s and an array of strings words, return the number of words[i] that is a subsequence of s.
+
+A subsequence of a string is a new string generated from the original string with some characters (can be none) 
+deleted without changing the relative order of the remaining characters.
+
+For example, "ace" is a subsequence of "abcde".
+
+Given a string s and an array of strings words, return the number of words[i] that is a subsequence of s.
+
+A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
+
+For example, "ace" is a subsequence of "abcde".
+
+Intuition: Take all given subsequences into map and loop the keyset of strings in map and compare eash character with the original string 
+whether subsequence or not.
+
+class Solution {
+    public int numMatchingSubseq(String s, String[] words) {
+        int count=0;
+        Map<String,Integer> map=new HashMap<>();
+        for(String str:words){
+            map.put(str,map.getOrDefault(str,0)+1);
+        }
+        for(String str: map.keySet()){
+            int i=0,j=0;
+            while(j<s.length() && i<str.length()){
+                if(str.charAt(i)==s.charAt(j)){
+                    i++;
+                    j++;
+                }else{
+                    j++;
+                }
+            }
+            if(i==str.length()){
+                count+=map.get(str);
+            }
+        }
+        return count;
+    }
+}
