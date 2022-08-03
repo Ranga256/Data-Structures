@@ -1,0 +1,40 @@
+Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
+
+A palindrome string is a string that reads the same backward as forward.
+
+Input: s = "aab"
+Output: [["a","a","b"],["aa","b"]]
+
+Intuition: need to divide from 1-len so using loop need to divide using recursion with index
+
+class Solution {
+    public void resultset(String s,int ind,List<String> lis,List<List<String>> res){
+        if(ind==s.length()){
+            res.add(new ArrayList<>(lis));
+            return;
+        }
+        for(int i=ind;i<s.length();i++){
+            if(ispalindrome(s,ind,i)){
+                lis.add(s.substring(ind,i+1));
+                resultset(s,i+1,lis,res);
+                lis.remove(lis.size()-1);
+            }
+        }
+    }
+    public boolean ispalindrome(String s,int ind,int end){
+        while(ind<end){
+            if(s.charAt(ind)!=s.charAt(end)){
+                return false;
+            }
+            ind++;
+            end--;
+        }
+        return true;
+    }
+    public List<List<String>> partition(String s) {
+       List<List<String>> res=new ArrayList<>();
+        List<String> lis=new ArrayList<>();
+        resultset(s,0,lis,res);
+        return res;
+    }
+}
