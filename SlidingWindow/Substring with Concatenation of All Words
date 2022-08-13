@@ -1,0 +1,48 @@
+Input: s = "barfoothefoobarman", words = ["foo","bar"]
+Output: [0,9]
+Explanation: Substrings starting at index 0 and 9 are "barfoo" and "foobar" respectively.
+The output order does not matter, returning [9,0] is fine too.
+
+
+
+Worked fine but got tle
+
+class Solution {
+    public List<Integer> findSubstring(String s, String[] words) {
+        int k=words[0].length(),flag=0,len=words.length;
+        Map<String,Integer> ls=new HashMap<>();
+        List<Integer> res=new ArrayList<>();
+        int n=s.length();
+        if(len==1 && n==1){
+            res.add(0);
+            return res;
+        }
+        
+        for(String word: words){
+            ls.put(word,ls.getOrDefault(word,0)+1);
+        }
+        for(int i=0;i<n-k;i++){
+            int j=i;
+            int count=0;
+            Map<String,Integer> list=new HashMap<>();
+            while(count<len && j+k<=n){
+                String check=s.substring(j,j+k);
+                //System.out.println(check);
+                if((ls.containsKey(check) && list.containsKey(check)!=true) || (ls.containsKey(check) && list.get(check)<ls.get(check))){
+                    count++;
+                    //System.out.println(check);
+                    list.put(check,list.getOrDefault(check,0)+1);
+                    j=j+k;
+                    flag=1;
+                }else{
+                    flag=0;
+                    break;
+                }
+            }
+            if(flag==1 && count==len){
+                res.add(i);
+            }
+        }
+        return res;
+    }
+}
