@@ -1,0 +1,58 @@
+Input: stamp = "abc", target = "ababc"
+Output: [0,2]
+Explanation: Initially s = "?????".
+- Place stamp at index 0 to get "abc??".
+- Place stamp at index 2 to get "ababc".
+[1,0,2] would also be accepted as an answer, as well as some other answers.
+
+Intuition: need to get first matching index and update to stars and then get remaining matching to get indexes, if not match return null;
+
+class Solution {
+    private int stampIndex(char[] tar,String stamp){
+        for(int i=0;i<=tar.length-stamp.length();i++){
+            int j=0;
+            int s=i;
+            boolean isnonchar=false;
+            while(j<stamp.length() && s<tar.length && (tar[s]==stamp.charAt(j) || tar[s]=='*')){
+                if(tar[s]!='*'){
+                    isnonchar=true;
+                }
+                s++;
+                j++;
+                
+        }
+            if(j==stamp.length() && isnonchar==true){
+                return i;
+            }
+    }
+       return -1; 
+    }
+    private void update(char[] tar,int ind,String stamp){
+        for(int j=0;j<stamp.length();j++){
+            tar[j+ind]='*';
+        }
+    }
+    public int[] movesToStamp(String stamp, String target) {
+        List<Integer> list=new ArrayList<>();
+        char[] tar=target.toCharArray();
+        char[] targetstr=new char[target.length()];
+        Arrays.fill(targetstr,'*');
+        while(!Arrays.equals(tar,targetstr)){
+            System.out.println(targetstr);
+            int sInd=stampIndex(tar,stamp);
+            if(sInd<0){
+                return new int[0];
+            }else{
+                update(tar,sInd,stamp);
+            }
+            list.add(sInd);
+        }
+        int[] res=new int[list.size()];
+        int k=0;
+        for(int i=res.length-1;i>=0;i--){
+            res[k]=list.get(i);
+            k++;
+        }
+        return res;
+    }
+}
