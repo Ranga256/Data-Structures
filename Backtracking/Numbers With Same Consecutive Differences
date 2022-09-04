@@ -1,0 +1,40 @@
+Return all non-negative integers of length n such that the absolute difference between every two consecutive digits is k.
+
+Note that every number in the answer must not have leading zeros. For example, 01 has one leading zero and is invalid.
+
+You may return the answer in any order.
+
+Input: n = 3, k = 7
+Output: [181,292,707,818,929]
+Explanation: Note that 070 is not a valid number, because it has leading zeroes.
+
+Intuition: loop dfs from 0-9 by taking digit(added digit) and numbers left(n) , check if digits are 0 and add digit to result
+else check if the lastdigit+k<=9 and the add to digit , else check if the lastdigitk>=9 and the diff to digit
+
+class Solution {
+    public void helper(int digit,int k,int digLeft,List<Integer> list){
+        if(digLeft==0){
+            list.add(digit);
+            return;
+        }
+        int lastdig=digit%10;
+        if(lastdig+k<=9){
+            helper(digit*10+lastdig+k,k,digLeft-1,list);
+        }
+        if(lastdig-k>=0 && k!=0){
+            helper(digit*10+lastdig-k,k,digLeft-1,list);
+        }
+    }
+    public int[] numsSameConsecDiff(int n, int k) {
+        List<Integer> list=new ArrayList<>();
+        for(int i=1;i<=9;i++){
+            helper(i,k,n-1,list);
+        }
+        int len=list.size();
+        int[] res=new int[len];
+        for(int i=0;i<len;i++){
+            res[i]=list.get(i);
+        }
+        return res;
+    }
+}
