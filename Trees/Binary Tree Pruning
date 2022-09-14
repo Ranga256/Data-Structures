@@ -1,0 +1,26 @@
+Given the root of a binary tree, return the same tree where every subtree (of the given tree) not containing a 1 has been removed.
+
+A subtree of a node node is node plus every node that is a descendant of node.
+
+
+Input: root = [1,null,0,0,1]
+Output: [1,null,0,null,1]
+Explanation: 
+Only the red nodes satisfy the property "every subtree not containing a 1".
+The diagram on the right represents the answer.
+
+Intuition: using dfs recursively store left and right and check left and right == null and val==0 to return null.
+
+class Solution {
+    public TreeNode pruneTree(TreeNode root) {
+       if(root==null){
+           return root;
+       }
+        root.left=pruneTree(root.left);
+        root.right=pruneTree(root.right);
+        if(root.left==null && root.right==null && root.val==0){
+            return null;
+        }
+        return root;
+    }
+}
