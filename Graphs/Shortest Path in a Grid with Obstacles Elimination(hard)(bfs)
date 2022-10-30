@@ -1,0 +1,65 @@
+You are given an m x n integer matrix grid where each cell is either 0 (empty) or 1 (obstacle). You can move up, down, left, or right from and to an empty cell in one step.
+
+Return the minimum number of steps to walk from the upper left corner (0, 0) to the lower right corner (m - 1, n - 1) given that you can eliminate at most k obstacles. 
+
+If it is not possible to find such walk return -1.
+
+Input: grid = [[0,0,0],[1,1,0],[0,0,0],[0,1,1],[0,0,0]], k = 1
+Output: 6
+Explanation: 
+The shortest path without eliminating any obstacle is 10.
+The shortest path with one obstacle elimination at position (3,2) is 6. Such path is (0,0) -> (0,1) -> (0,2) -> (1,2) -> (2,2) -> (3,2) -> (4,2).
+
+
+class pair {
+    int row;
+    int col;
+    int steps;
+    int k1;
+    pair(int row,int col,int steps,int k1){
+        this.row=row;
+        this.col=col;
+        this.steps=steps;
+        this.k1=k1;
+    }
+}
+class Solution {
+    public int shortestPath(int[][] grid, int k) {
+        int m=grid.length;
+        int n=grid[0].length,max=m+n-2;
+        int[] rows={0,  0, 1, -1};
+        int[] cols={1, -1, 0,  0};
+        if (k > max - 2) return max;
+        int[][] vis=new int[m][n];
+        for (var a : vis) Arrays.fill(a, -1);
+        Queue<pair> pq=new LinkedList<>();
+        pq.offer(new pair(0,0,0,k));
+        vis[0][0]=k;
+        while(!pq.isEmpty()){
+            int nrow=pq.peek().row;
+            int ncol=pq.peek().col;
+            int step=pq.peek().steps;
+            int tempk=pq.peek().k1;
+            pq.poll();
+            if(nrow==m-1 && ncol==n-1){
+                return step;
+            }
+            for(int i=0;i<4;i++){
+                int r=rows[i]+nrow;
+                int c=cols[i]+ncol;
+                if(r<0 || c<0 || r>=m || c>=n){
+                    continue;
+                }
+                int k2=tempk-grid[r][c];
+                System.out.println(r+" "+c+" "+tempk);
+                if(k2<=vis[r][c]){
+                    
+                    continue;
+                }
+                vis[r][c]=k2;
+                pq.add(new pair(r,c,step+1,k2));
+            }
+        }
+        return -1;
+    }
+}
