@@ -1,0 +1,36 @@
+Intuition: to check cycle for directed graph we need to take vis,pathvis array and need to unmark the pathvis array when we come out of that path
+so that we can check whether we travelled in same path or not.
+
+
+class Solution {
+    // Function to detect cycle in a directed graph.
+    public boolean dfs(int i,int V,ArrayList<ArrayList<Integer>> adj,int[] vis,int[] path){
+        vis[i]=1;
+        path[i]=1;
+        for(Integer ind:adj.get(i)){
+            if(vis[ind]==0){
+                if(dfs(ind,V,adj,vis,path)==true){
+                    return true;
+                }
+            }else if(path[ind]==1){
+                return true;
+            }
+        }
+        path[i]=0;
+        return false;
+    }
+    public boolean isCyclic(int V, ArrayList<ArrayList<Integer>> adj) {
+        // code here
+        int[] vis=new int[V];
+        int[] path=new int[V];
+        
+        for(int i=0;i<V;i++){
+            if(vis[i]==0){
+                if(dfs(i,V,adj,vis,path)==true){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
