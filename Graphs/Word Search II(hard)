@@ -1,0 +1,45 @@
+Given an m x n board of characters and a list of strings words, return all words on the board.
+
+Each word must be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. 
+The same letter cell may not be used more than once in a word.
+
+Input: board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"]
+Output: ["eat","oath"]
+
+Intuition: for every word check from every cell using bfs by creating vis array for every cell. if the word found and returns true break loop and
+start for another word
+
+
+
+class Solution {
+    public boolean helper(char[][] board, String word,int i,int j,int ind,int m,int n,boolean[][] vis){
+        if(ind==word.length()){
+            return true;
+        }
+        if(i<0 || j<0 || i>=m || j>=n || board[i][j]!=word.charAt(ind) || vis[i][j]==true){
+            return false;
+        }
+        vis[i][j]=true;
+        boolean res = (helper(board,word,i+1,j,ind+1,m,n,vis) || helper(board,word,i-1,j,ind+1,m,n,vis) || helper(board,word,i,j+1,ind+1,m,n,vis) || helper(board,word,i,j-1,ind+1,m,n,vis));
+        vis[i][j]=false;
+        return res;
+    }
+    public List<String> findWords(char[][] board, String[] words) {
+        int m=board.length,n=board[0].length;
+        Set<String> ans=new HashSet<>();
+        for(String word: words){
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                boolean[][] vis=new boolean[m][n];
+                if(word.charAt(0)==board[i][j]){
+                if(helper(board,word,i,j,0,m,n,vis)==true){
+                    ans.add(word);
+                    break;
+                }
+            }
+            }
+        }
+    }
+        return new ArrayList<>(ans);
+    }
+}
