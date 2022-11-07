@@ -1,0 +1,35 @@
+Input: words = ["lc","cl","gg"]
+Output: 6
+Explanation: One longest palindrome is "lc" + "gg" + "cl" = "lcggcl", of length 6.
+Note that "clgglc" is another longest palindrome that can be created.
+
+
+
+Intuition: 2scenarios consider one with two opp letters and with 2same letters ,with the help of map
+we need to add non palindromic(str->rev) to map and increase count.
+2nd sce we want only one same letters nonrepeated string so using loop need to get that from map.
+
+
+
+class Solution {
+    public int longestPalindrome(String[] words) {
+        Map<String,Integer> list=new HashMap<>();
+        int c=0,flag=0;
+        for(String str:words){
+            String rev=str.charAt(1)+""+str.charAt(0);
+            if(list.containsKey(rev) && list.get(rev)>0){
+                c+=4;
+                list.put(rev,list.get(rev)-1);
+            }
+            else{
+                list.put(str,list.getOrDefault(str,0)+1);
+            }
+        }
+        for(String str:list.keySet()){
+            if(str.charAt(1)==str.charAt(0) && list.get(str)>0){
+                return c+2;
+            }
+        }
+        return c;
+    }
+}
