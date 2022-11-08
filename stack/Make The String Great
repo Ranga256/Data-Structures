@@ -1,0 +1,27 @@
+Input: s = "abBAcC"
+Output: ""
+Explanation: We have many possible scenarios, and all lead to the same answer. For example:
+"abBAcC" --> "aAcC" --> "cC" --> ""
+"abBAcC" --> "abBA" --> "aA" --> ""
+
+
+class Solution {
+    public String makeGood(String s) {
+        char[] ch=s.toCharArray();
+        Stack<Character> pq=new Stack<>();
+        for(int i=0;i<ch.length;i++){
+            if(pq.empty()){
+                pq.push(ch[i]);
+            }else if(ch[i]+32==pq.peek() || ch[i]==pq.peek()+32){
+                    pq.pop();
+            }else{
+                pq.push(ch[i]);
+            }
+        }
+        s="";
+        while(!pq.empty()){
+            s=pq.pop()+s;
+        }
+        return s;
+    }
+}
