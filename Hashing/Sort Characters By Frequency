@@ -1,0 +1,32 @@
+Given a string s, sort it in decreasing order based on the frequency of the characters. The frequency of a character is the number of times it appears in the string.
+
+Return the sorted string. If there are multiple answers, return any of them.
+
+Input: s = "tree"
+Output: "eert"
+Explanation: 'e' appears twice while 'r' and 't' both appear once.
+So 'e' must appear before both 'r' and 't'. Therefore "eetr" is also a valid answer.
+
+Intuition: count the frequency of chars and add them in treemap of (Integer,string) by freqs and append them to string, return reverse of string.
+
+class Solution {
+    public String frequencySort(String s) {
+        Map<Character,Integer> map=new HashMap<>();
+        for(int i=0;i<s.length();i++){
+            map.put(s.charAt(i),map.getOrDefault(s.charAt(i),0)+1);
+        }
+        TreeMap<Integer,String> m2=new TreeMap<>();
+        for(Map.Entry<Character,Integer> entry: map.entrySet()){
+            m2.put(entry.getValue(),m2.getOrDefault(entry.getValue(),"")+String.valueOf(entry.getKey()));
+        }
+        StringBuilder str=new StringBuilder();
+        m2.forEach((k, v)-> {
+            for(char c: v.toCharArray()) {
+                for(int j = 1; j <= k; j++) {
+                    str.append(c);
+                }
+            }
+        });
+        return str.reverse().toString();
+    }
+}
