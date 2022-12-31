@@ -1,0 +1,65 @@
+You are given an m x n integer array grid where grid[i][j] could be:
+
+1 representing the starting square. There is exactly one starting square.
+2 representing the ending square. There is exactly one ending square.
+0 representing empty squares we can walk over.
+-1 representing obstacles that we cannot walk over.
+Return the number of 4-directional walks from the starting square to the ending square, that walk over every non-obstacle square exactly once.
+
+Input: grid = [[1,0,0,0],[0,0,0,0],[0,0,2,-1]]
+Output: 2
+Explanation: We have the following two paths: 
+1. (0,0),(0,1),(0,2),(0,3),(1,3),(1,2),(1,1),(1,0),(2,0),(2,1),(2,2)
+2. (0,0),(1,0),(2,0),(2,1),(1,1),(0,1),(0,2),(0,3),(1,3),(1,2),(2,2)
+
+Intuition: backtracking using dfs
+
+class Solution {
+    int c=0;
+    public void helper(int i,int j,int[][] grid,int m,int n,int[] row,int[] col){
+        if(grid[i][j]==2){
+            for(int a=0;a<m;a++){
+                for(int b=0;b<n;b++){
+                    if(grid[a][b]==0){
+                        System.out.println("Hi");
+                        return;
+                    }
+                }
+            }
+            c++;
+            return;
+        }
+        for(int x=0;x<4;x++){
+            int nrow=i+row[x];
+            int ncol=j+col[x];
+            if(nrow>=0 && ncol>=0 && nrow<m && ncol<n && (grid[nrow][ncol]==0 || grid[nrow][ncol]==2)){
+                if(grid[nrow][ncol]==0){
+                  grid[nrow][ncol]=-1;
+                  helper(nrow,ncol,grid,m,n,row,col);
+                  grid[nrow][ncol]=0;
+                }else{
+                    helper(nrow,ncol,grid,m,n,row,col);
+                }
+            }
+        }
+        return;
+    }
+    public int uniquePathsIII(int[][] grid) {
+        int m=grid.length,n=grid[0].length,i=0,j=0,flag=0;
+        for(i=0;i<m;i++){
+            for(j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    flag=1;
+                    break;
+                }
+            }
+            if(flag==1){
+                break;
+            }
+        }
+        int[] row={0,1,0,-1};
+        int[] col={-1,0,1,0};
+        helper(i,j,grid,m,n,row,col);
+        return c;
+    }
+}
