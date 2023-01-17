@@ -1,0 +1,37 @@
+Given a pattern and a string s, find if s follows the same pattern.
+
+Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word in s.
+
+Input: pattern = "abba", s = "dog cat cat dog"
+Output: true
+
+Intuition: Use set and Map for storing string and pattern char, if string is there in set and pattern char not there in
+map return false.
+
+class Solution {
+    public boolean wordPattern(String pattern, String s) {
+        int len=pattern.length();
+        Map<Character,String> map=new HashMap<>();
+        Set<String> set=new HashSet<>();
+        String[] str=s.split(" ");
+        int n=str.length;
+        if(n!=len){
+            return false;
+        }
+        for(int i=0;i<len;i++){
+            char s1=pattern.charAt(i);
+            if(map.containsKey(s1)){
+                if(!map.get(s1).equals(str[i])){
+                    return false;
+                }
+            }else{
+                if(set.contains(str[i])){
+                    return false;
+                }
+               map.put(s1,str[i]);
+               set.add(str[i]);
+            }
+        }
+        return true;
+    }
+}
