@@ -1,0 +1,41 @@
+Given an integer array nums, return all the different possible non-decreasing subsequences of the given array with at least two elements. 
+You may return the answer in any order.
+
+Input: nums = [4,6,7,7]
+Output: [[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]
+
+Intuition: take and nottake by checking greater or not.
+
+class Solution {
+    public void helper(int ind,int[] nums,List<List<Integer>> res,List<Integer> list,int n){
+        if(ind>=n){
+            return;
+        }
+        int len=list.size();
+        if(len==0){
+            list.add(nums[ind]);
+            helper(ind+1,nums,res,list,n);
+            list.remove(Integer.valueOf(nums[ind]));
+            helper(ind+1,nums,res,list,n);
+        }
+        else if(list.get(len-1)<=nums[ind]){
+            list.add(nums[ind]);
+            List<Integer> temp=new ArrayList<>();
+            for(int i=0;i<len;i++){
+                temp.add(list.get(i));
+            }
+            res.add(temp);
+            helper(ind+1,nums,res,list,n);
+            list.remove(Integer.valueOf(nums[ind]));
+            helper(ind+1,nums,res,list,n);
+        }else{
+           helper(ind+1,nums,res,list,n);
+        }
+    }
+    public List<List<Integer>> findSubsequences(int[] nums) {
+        List<List<Integer>> res=new ArrayList<>();
+        List<Integer> list=new ArrayList<>();
+        helper(0,nums,res,list,nums.length);
+        return res;
+    }
+}
