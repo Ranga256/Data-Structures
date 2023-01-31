@@ -1,0 +1,25 @@
+Input: s = "00110"
+Output: 1
+Explanation: We flip the last digit to get 00111.
+
+
+class Solution {
+    public int minFlipsMonoIncr(String s) {
+        int n=s.length(),c0=0,c1=0;
+        for(int i=0;i<n;i++){
+            if(s.charAt(i)=='0'){
+                c0++;
+            }
+        }
+        int minflips=n-c0;
+        for(int i=0;i<n;i++){
+            if(s.charAt(i)=='0'){
+                c0--;
+            }else{
+                minflips=Math.min(minflips,c0+c1);
+                c1++;
+            }
+        }
+        return minflips;
+    }
+}
