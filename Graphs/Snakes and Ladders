@@ -1,0 +1,63 @@
+Input: board = [[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,-1,-1,-1,-1,-1],[-1,35,-1,-1,13,-1],[-1,-1,-1,-1,-1,-1],[-1,15,-1,-1,-1,-1]]
+Output: 4
+Explanation: 
+In the beginning, you start at square 1 (at row 5, column 0).
+You decide to move to square 2 and must take the ladder to square 15.
+You then decide to move to square 17 and must take the snake to square 13.
+You then decide to move to square 14 and must take the ladder to square 35.
+You then decide to move to square 36, ending the game.
+This is the lowest possible number of moves to reach the last square, so return 4.
+
+Intuition: using bfs start from 1 and loop for 6dice nums, add num and step in queue if not visited, find r,c for every num for ladder and snake
+
+class pair {
+    int num;
+    int steps;
+    pair(int num,int steps){
+        this.num=num;
+        this.steps=steps;
+    }
+}
+class Solution {
+    public int[] convert(int n,int m){
+        int[] rc=new int[2];
+        int row = (n-1)/m;
+        int column = (n-1)%m;
+        if(row%2!=0){
+            column = (column-m+1)*-1;
+        }
+        row = (row-m+1)*-1;
+        rc[0]=row;
+        rc[1]=column;
+        return rc;
+    }
+    public int snakesAndLadders(int[][] board) {
+        int m=board.length,n=board[0].length;
+        Queue<pair> pq=new LinkedList<>();
+        int[][] vis=new int[m*m][n*n];
+        vis[n-1][0]=1;
+        pq.offer(new pair(1,0));
+        while(!pq.isEmpty()){
+            int num=pq.peek().num;
+            int step=pq.peek().steps;
+            System.out.println(num);
+            pq.remove();
+            if(num==m*m){
+                return step;
+            }
+            for(int i=1;i<7;i++){
+                int[] rc=convert(num+i,m);
+                if(num+i<=m*m && vis[rc[0]][rc[1]]==0){
+                    if(board[rc[0]][rc[1]]!=-1){
+                        pq.offer(new pair(board[rc[0]][rc[1]],step+1));
+                        vis[rc[0]][rc[1]]=1;
+                        continue;
+                    }
+                    pq.offer(new pair(num+i,step+1));
+                    vis[rc[0]][rc[1]]=1;
+                }
+            }
+        }
+        return -1;
+    }
+}
