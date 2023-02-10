@@ -1,0 +1,53 @@
+Given an n x n grid containing only values 0 and 1, where 0 represents water and 1 represents land, 
+find a water cell such that its distance to the nearest land cell is maximized, and return the distance. If no land or water exists in the grid, return -1.
+
+The distance used in this problem is the Manhattan distance: the distance between two cells (x0, y0) and (x1, y1) is |x0 - x1| + |y0 - y1|.
+
+Intuition: simple bfs
+
+class pair{
+    int first;
+    int second;
+    int step;
+    pair(int first,int second,int step){
+        this.first=first;
+        this.second=second;
+        this.step=step;
+    }
+}
+class Solution {
+    public int maxDistance(int[][] grid) {
+        int m=grid.length,n=grid[0].length,max=0;
+        Queue<pair> pq=new LinkedList<>();
+        int[][] vis=new int[m][n];
+        int[] row={-1,0,1,0};
+        int[] col={0,1,0,-1};
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    pq.offer(new pair(i,j,0));
+                    vis[i][j]=1;
+                }
+            }
+        }
+        if(pq.size()==0 || pq.size()==m*m){
+            return -1;
+        }
+        while(!pq.isEmpty()){
+            int i1=pq.peek().first;
+            int i2=pq.peek().second;
+            int steps=pq.peek().step;
+            max=Math.max(max,steps);
+            pq.remove();
+            for(int i=0;i<4;i++){
+                int r=i1+row[i];
+                int c=i2+col[i];
+                if(r>=0 && r<m && c>=0 && c<n && vis[r][c]==0){
+                    pq.offer(new pair(r,c,steps+1));
+                    vis[r][c]=1;
+                }
+            }
+        }
+        return max;
+    }
+}
