@@ -1,0 +1,54 @@
+You are visiting a farm that has a single row of fruit trees arranged from left to right. The trees are represented by an integer array fruits 
+where fruits[i] is the type of fruit the ith tree produces.
+
+You want to collect as much fruit as possible. However, the owner has some strict rules that you must follow:
+
+You only have two baskets, and each basket can only hold a single type of fruit. There is no limit on the amount of fruit each basket can hold.
+Starting from any tree of your choice, you must pick exactly one fruit from every tree (including the start tree) while moving to the right. 
+The picked fruits must fit in one of your baskets.
+Once you reach a tree with fruit that cannot fit in your baskets, you must stop.
+Given the integer array fruits, return the maximum number of fruits you can pick.
+
+Input: fruits = [1,2,1]
+Output: 3
+Explanation: We can pick from all 3 trees.
+
+Intuition: sliding window and hashing.
+
+
+class Solution {
+    public int totalFruit(int[] fruits) {
+       Map<Integer,Integer> hash=new HashMap<>();
+       int j=0,k=2,max=0,count=0;
+       for(int i=0;i<fruits.length;i++){
+           if(k>0){
+               if(!hash.containsKey(fruits[i])){
+                   hash.put(fruits[i],1);
+                   k--;
+               }else{
+                   hash.put(fruits[i],hash.get(fruits[i])+1);
+               }
+               count++;
+           }else if(hash.containsKey(fruits[i])){
+               hash.put(fruits[i],hash.get(fruits[i])+1);
+               count++;
+           }else{
+               max=Math.max(count,max);
+               while(k<=0){
+                   hash.put(fruits[j],hash.get(fruits[j])-1);
+                   count--;
+                   if(hash.get(fruits[j])==0){
+                       hash.remove(fruits[j]);
+                       k++;
+                   }
+                   j++;
+               }
+               hash.put(fruits[i],1);
+               count++;
+               k--;
+           }
+       }
+       max=Math.max(max,count);
+       return max;
+    }
+}
