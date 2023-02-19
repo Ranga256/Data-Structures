@@ -1,0 +1,34 @@
+Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. 
+(i.e., from left to right, then right to left for the next level and alternate between).
+
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]
+
+Intuition: store values based on level, and reverse the odd levels.
+
+class Solution {
+    public void helper(TreeNode root,int level,Map<Integer,List<Integer>> hash){
+        if(root==null){
+            return;
+        }
+        hash.put(level,hash.getOrDefault(level,new ArrayList<>()));
+        hash.get(level).add(root.val);
+        helper(root.left,level+1,hash);
+        helper(root.right,level+1,hash);
+        return;
+    }
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        Map<Integer,List<Integer>> hash = new HashMap<>();
+        helper(root,0,hash);
+        for(int i=0;i<hash.size();i++){
+            if(i%2==0){
+                res.add(hash.get(i));
+            }else{
+                Collections.reverse(hash.get(i));
+                res.add(hash.get(i));
+            }
+        }
+        return res;
+    }
+}
