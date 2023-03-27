@@ -1,0 +1,46 @@
+You are given an integer n. There is an undirected graph with n nodes, numbered from 0 to n - 1. 
+You are given a 2D integer array edges where edges[i] = [ai, bi] denotes that there exists an undirected edge connecting nodes ai and bi.
+
+Return the number of pairs of different nodes that are unreachable from each other.
+
+Input: n = 3, edges = [[0,1],[0,2],[1,2]]
+Output: 0
+Explanation: There are no pairs of nodes that are unreachable from each other. Therefore, we return 0.
+
+Intuition: find the connected componenta and count of nodes in that component, the number will be same for all nodes in a component.
+
+class Solution {
+    public void dfs(int n,List<List<Integer>> adj ,int node,int[] vis,long[] count){
+        vis[node]=1;
+        count[0]++;
+        for(Integer num:adj.get(node)){
+            if(vis[num]==0){
+                dfs(n,adj,num,vis,count);
+            }
+        }
+    }
+    public long countPairs(int n, int[][] edges) {
+        List<List<Integer>> adj=new ArrayList<>();
+        int len=edges.length;
+        long count=0;
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i=0;i<len;i++){
+            adj.get(edges[i][0]).add(edges[i][1]);
+            adj.get(edges[i][1]).add(edges[i][0]);
+        }
+        int[] vis=new int[n];
+        int n1=n;
+        for(int i=0;i<n;i++){
+            long[] tempc=new long[1];
+            if(vis[i]==0){
+                dfs(n,adj,i,vis,tempc);
+                count+=(n1-tempc[0])*tempc[0];
+                n1-=tempc[0];
+            }
+        }
+        return count;
+    }
+}
