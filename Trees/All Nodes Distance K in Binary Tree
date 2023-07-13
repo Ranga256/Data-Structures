@@ -1,0 +1,63 @@
+Given the root of a binary tree, the value of a target node target, and an integer k, return an array of the values of all nodes that have a distance k from the target node.
+
+You can return the answer in any order.
+
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, k = 2
+Output: [7,4,1]
+Explanation: The nodes that are a distance 2 from the target node (with value 5) have values 7, 4, and 1.
+
+Solution: with dfs or bfs list all parent node to particular nodes in map, then using bfs with level count if any level matches at any node we add in result.
+in queue we add all adjacent nodes of particular node ie., root,left,right
+
+import java.util.*;
+class Solution {
+    public void parentForNode(Map<TreeNode,TreeNode> parent,TreeNode root){
+        if(root==null){
+            return;
+        }
+        if(root.left!=null){
+            parent.put(root.left,root);
+        }
+        if(root.right!=null){
+            parent.put(root.right,root);
+        }
+        parentForNode(parent,root.left);
+        parentForNode(parent,root.right);
+    }
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        Map<TreeNode,TreeNode> parent=new HashMap<>();
+        parentForNode(parent,root);
+        Map<TreeNode,Boolean> vis=new HashMap<>();
+        Queue<TreeNode> pq=new LinkedList<>();
+        pq.offer(target);
+        vis.put(target,true);
+        int level=0;
+        while(!pq.isEmpty()){
+            int n=pq.size();
+            if(level==k){
+                break;
+            }
+            level++;
+            while(n-- >0){
+                TreeNode curr=pq.poll();
+                if(curr.left!=null && !vis.containsKey(curr.left)){
+                    vis.put(curr.left,true);
+                    pq.offer(curr.left);
+                }
+                if(curr.right!=null && !vis.containsKey(curr.right)){
+                    vis.put(curr.right,true);
+                    pq.offer(curr.right);
+                }
+                if(parent.containsKey(curr) && !vis.containsKey(parent.get(curr))){
+                    vis.put(parent.get(curr),true);
+                    pq.offer(parent.get(curr));
+                }
+            }
+        }
+        List<Integer> ans = new ArrayList<>();
+        while (!pq.isEmpty()) {
+            ans.add(pq.poll().val);
+        }
+        return ans;
+    }
+}
